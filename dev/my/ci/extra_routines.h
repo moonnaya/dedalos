@@ -17,10 +17,10 @@ if (gpjt == 'w' && total_objects > 1) {  //migas
 //     night_mode = 1;
 // }
 
-_t = qtile(p_tx, p_ty);
+rdt = qtile(p_tx, p_ty);
 
 for (rdn = 0; rdn < 6; rdn++) {
-    if (_t == objects[rdn].tile) {
+    if (objects[rdn].tile != 0 && rdt == objects[rdn].tile) {
         objects[rdn].used = 0;
         objects[rdn].in_floor = 0;
         _x = objects[rdn].x;

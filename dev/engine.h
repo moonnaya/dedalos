@@ -286,6 +286,7 @@ unsigned char isWall(unsigned char tile) {
 	if (behs[tile] == 8) return 1; else return 0;
 }
 
+/*
 void fill_screen_axis_y() {
 	rdb = (rda * 15) + p_tx;
 	i = rdb + (150 * n_pant);
@@ -297,8 +298,9 @@ void fill_screen_axis_y() {
 		screen_flat[rdb + 1] = mapa[i + 1];
 	}
 
-}
+}*/
 
+ /*
 void fill_screen_axis_x() {
 	rdb = p_ty * 15;
 	i = rdb + rda + (n_pant * 150);
@@ -312,83 +314,66 @@ void fill_screen_axis_x() {
 	}
 }
 
+*/
+
+void fill_screen_axis_y() {
+	rdb = (rda * 15) + p_tx;
+	i = rdb + (150 * n_pant);
+	screen_flat[rdb] = mapa[i];
+	// Se comprueba la columna, no rdb: si no, en los bordes se cuela la fila vecina
+	if (p_tx > 0) screen_flat[rdb - 1] = mapa[i - 1];
+	if (p_tx < 14) screen_flat[rdb + 1] = mapa[i + 1];
+}
+
+void fill_screen_axis_x() {
+	rdb = p_ty * 15;
+	i = rdb + rda + (n_pant * 150);
+	rdc = rda + rdb;
+	screen_flat[rdc] = mapa[i];
+	if (p_ty > 0) screen_flat[rdc - 15] = mapa[i - 15];
+	if (p_ty < 9) screen_flat[rdc + 15] = mapa[i + 15];
+}
+
 void vision() {
 	update_vision = 0;
-
-
-	/*for (gpit = 0; gpit < 100; ++gpit){
-		if (n_pant == bread_tiles[gpit].pant) {
-			*(map_pointer + bread_tiles[gpit].pos) = 15;
-		}
-	}
-
-	for (gpit = 0; gpit < 2; gpit++) {
-		if (n_pant == doors[gpit].pant) {
-			*(map_pointer + doors[gpit].pos) = 7;
-		}
-	}
-
-	for (gpit = 0; gpit < 6; gpit++) {
-		if (objects[gpit].in_floor == 1 && objects[gpit].pant == n_pant) {
-			*(map_pointer + (objects[gpit].x + (objects[gpit].y * 15))) = objects[gpit].tile;
-		}
-	} */
 
 	for (rda = 0; rda < 150; rda++) {
 		screen_flat[rda] = 0;
 	}
 
-	if (player_direction == 0) {
-		for (rda = p_ty - 1; rda < 10; rda = rda + 1) {
-			fill_screen_axis_y();
-			if (isWall(screen_flat[rdb] == 1)) {
-				//break;
-			}
-		}
-	} else if (player_direction == 1) {
-		for (rda = p_ty + 1; rda >= 0; rda = rda - 1) {
-			fill_screen_axis_y();
-			if (isWall(screen_flat[rdb] == 1)) {
-				break;
-			}
-		}
-	} else if (player_direction == 2) {
-		for (rda = p_tx; rda >= 0; rda = rda - 1) {
-			fill_screen_axis_x();
-			if (isWall(screen_flat[rdc]) == 1) {
-				break;
-			}
+	// rda es unsigned char: "rda >= 0" siempre es cierto, por eso los bucles
+	// hacia arriba/izquierda salen con un break explícito al llegar a 0.
 
+	if (player_direction == 0) { // abajo
+		// casilla de detrás (sin cortar por pared)
+		if (p_ty > 0) { rda = p_ty - 1; fill_screen_axis_y(); }
+		for (rda = p_ty; rda < 10; rda++) {
+			fill_screen_axis_y();
+			if (isWall(screen_flat[rdb])) break;
 		}
-	} else if (player_direction == 3) {
-		for (rda = p_tx; rda < 15; rda = rda + 1) {
+	} else if (player_direction == 1) { // arriba
+		if (p_ty < 9) { rda = p_ty + 1; fill_screen_axis_y(); }
+		rda = p_ty;
+		while (1) {
+			fill_screen_axis_y();
+			if (isWall(screen_flat[rdb])) break;
+			if (rda == 0) break;
+			rda--;
+		}
+	} else if (player_direction == 2) { // izquierda
+		rda = p_tx;
+		while (1) {
 			fill_screen_axis_x();
-			if (isWall(screen_flat[rdc]) == 1) {
-				break;
-			}
-
+			if (isWall(screen_flat[rdc])) break;
+			if (rda == 0) break;
+			rda--;
+		}
+	} else if (player_direction == 3) { // derecha
+		for (rda = p_tx; rda < 15; rda++) {
+			fill_screen_axis_x();
+			if (isWall(screen_flat[rdc])) break;
 		}
 	}
-
-	// for (j = yini; j <= yfin; j++) {
-	// 	for (i = xini; i <= xfin; i++) {
-	// 		index = i + (j * 15);
-	// 		_t = screen[j][i];
-	// 		if (night_mode == 1) {
-	// 			if (_t == 1) _t = 8;
-	// 			if (_t == 2) _t = 9;
-	// 			if (_t == 3) _t = 10;
-	// 			if (_t == 4) _t = 11;
-	// 			if (_t == 5) _t = 12;
-	// 			if (_t == 6) _t = 13;
-	// 			if (_t == 7) _t = 16;
-	// 			if (_t == 15) _t = 14;
-	// 			if (_t == 17) _t = 18;
-	// 		}
-	// 		screen_flat[index] = _t;
-	// 	}
-	// }
-
 }
 
 void draw_screen() {
