@@ -54,10 +54,12 @@ if (action == 1 && bread > 0) {
         }
     } else if (eat == 1) {
         eat = 0;
-        bread = bread - 10;
-        hungry = hungry + 10;
+        // bread es unsigned: restar 10 con menos de 10 daba la vuelta (~250)
+        // y luego bread_tiles[99 - bread] escribia fuera del array.
+        if (bread >= 10) rdt = 10; else rdt = bread;
+        bread = bread - rdt;
+        hungry = hungry + rdt;
         if (hungry > 99) hungry = 99;
-        eat = 0;
         print_hungry();
         print_bread();
     }

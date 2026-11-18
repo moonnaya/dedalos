@@ -334,6 +334,14 @@ void fill_screen_axis_x() {
 	if (p_ty < 9) screen_flat[rdc + 15] = mapa[i + 15];
 }
 
+// 1 si la posicion (x + y * 15) cae dentro de la zona que ve el jugador
+unsigned char pos_in_vision(unsigned char pos) {
+	rdx = pos % 15;
+	rdy = pos / 15;
+	if (rdx < xini || rdx > xfin || rdy < yini || rdy > yfin) return 0;
+	return 1;
+}
+
 void vision() {
 	update_vision = 0;
 
@@ -341,17 +349,22 @@ void vision() {
 		screen_flat[rda] = 0;
 	}
 
+	// player_direction vale 4 con el jugador parado (ver player.h), asi que la
+	// vista se calcula con previous_direction, que guarda hacia donde mira.
 	// rda es unsigned char: "rda >= 0" siempre es cierto, por eso los bucles
-	// hacia arriba/izquierda salen con un break explícito al llegar a 0.
+	// hacia arriba/izquierda salen con un break explicito al llegar a 0.
 
-	if (player_direction == 0) { // abajo
-		// casilla de detrás (sin cortar por pared)
+	if (previous_direction == 0) { // abajo
 		if (p_ty > 0) { rda = p_ty - 1; fill_screen_axis_y(); }
 		for (rda = p_ty; rda < 10; rda++) {
 			fill_screen_axis_y();
 			if (isWall(screen_flat[rdb])) break;
 		}
-	} else if (player_direction == 1) { // arriba
+		if (p_ty > 0) yini = p_ty - 1; else yini = 0;
+		if (rda > 9) yfin = 9; else yfin = rda;
+		if (p_tx > 0) xini = p_tx - 1; else xini = 0;
+		if (p_tx < 14) xfin = p_tx + 1; else xfin = 14;
+	} else if (previous_direction == 1) { // arriba
 		if (p_ty < 9) { rda = p_ty + 1; fill_screen_axis_y(); }
 		rda = p_ty;
 		while (1) {
@@ -360,7 +373,11 @@ void vision() {
 			if (rda == 0) break;
 			rda--;
 		}
-	} else if (player_direction == 2) { // izquierda
+		yini = rda;
+		if (p_ty < 9) yfin = p_ty + 1; else yfin = 9;
+		if (p_tx > 0) xini = p_tx - 1; else xini = 0;
+		if (p_tx < 14) xfin = p_tx + 1; else xfin = 14;
+	} else if (previous_direction == 2) { // izquierda
 		rda = p_tx;
 		while (1) {
 			fill_screen_axis_x();
@@ -368,10 +385,50 @@ void vision() {
 			if (rda == 0) break;
 			rda--;
 		}
-	} else if (player_direction == 3) { // derecha
+		xini = rda;
+		xfin = p_tx;
+		if (p_ty > 0) yini = p_ty - 1; else yini = 0;
+		if (p_ty < 9) yfin = p_ty + 1; else yfin = 9;
+	} else if (previous_direction == 3) { // derecha
 		for (rda = p_tx; rda < 15; rda++) {
 			fill_screen_axis_x();
 			if (isWall(screen_flat[rdc])) break;
+		}
+		xini = p_tx;
+		if (rda > 14) xfin = 14; else xfin = rda;
+		if (p_ty > 0) yini = p_ty - 1; else yini = 0;
+		if (p_ty < 9) yfin = p_ty + 1; else yfin = 9;
+	}
+
+	// Restaurar lo dejado en el suelo, solo dentro de la linea de vision
+	for (gpit = 0; gpit < 100; gpit++) {
+		if (bread_tiles[gpit].pant == n_pant && pos_in_vision(bread_tiles[gpit].pos)) {
+			if (night_mode == 0) screen_flat[bread_tiles[gpit].pos] = 15;
+			else screen_flat[bread_tiles[gpit].pos] = 14;
+		}
+	}
+
+	for (gpit = 0; gpit < 2; gpit++) {
+		if (doors[gpit].pant == n_pant && pos_in_vision(doors[gpit].pos)) {
+			screen_flat[doors[gpit].pos] = 7;
+		}
+	}
+
+	for (gpit = 0; gpit < 6; gpit++) {
+		if (objects[gpit].in_floor == 1 && objects[gpit].pant == n_pant) {
+			rdn = objects[gpit].x + (objects[gpit].y * 15);
+			if (pos_in_vision(rdn)) screen_flat[rdn] = objects[gpit].tile;
+		}
+	}
+
+	// Version nocturna de los tiles (1..6 -> 8..13, 7 -> 16, 15 -> 14, 17 -> 18)
+	if (night_mode == 1) {
+		for (rda = 0; rda < 150; rda++) {
+			rdt = screen_flat[rda];
+			if (rdt >= 1 && rdt <= 6) screen_flat[rda] = rdt + 7;
+			else if (rdt == 7) screen_flat[rda] = 16;
+			else if (rdt == 15) screen_flat[rda] = 14;
+			else if (rdt == 17) screen_flat[rda] = 18;
 		}
 	}
 }

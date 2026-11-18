@@ -186,6 +186,7 @@
 				p_tx = gpx << 4;
 				p_ty = gpy << 4;
 				player_direction = safe_point.direction;
+				previous_direction = safe_point.direction;
 				update_vision = 1;
 				print_lifes();
 				#include "my/ci/on_player_killed.h"
