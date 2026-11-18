@@ -1,0 +1,99 @@
+// MTE MK1 (la Churrera) v5.0
+// Copyleft 2010-2014, 2020 by the Mojon Twins
+  _x = 10; _y = 0; index = p_tx; _n= 4; print_number_wan ();
+  _x = 13; _y = 0; index = p_ty; _n= 5; print_number_wan ();
+  _x = 16; _y = 0; index = player_direction; _n= 4; print_number_wan ();
+   _x = 19; _y = 0; index = previous_direction; _n= 6; print_number_wan ();
+
+
+eat = 0;
+gpjt = sp_GetKey ();
+if (gpjt == 'w' && total_objects > 1) {  //migas
+    next_object();
+} else if (gpjt == 'e') {
+    eat = 1;
+}
+// else if (gpjt == '1') {
+//     night_mode = 1;
+// }
+
+_t = qtile(p_tx, p_ty);
+
+for (rdn = 0; rdn < 6; rdn++) {
+    if (_t == objects[rdn].tile) {
+        objects[rdn].used = 0;
+        objects[rdn].in_floor = 0;
+        _x = objects[rdn].x;
+        _y = objects[rdn].y;
+        _t = objects[rdn].old_tile;
+        update_tile();
+        if (objects[rdn].action == 3) {
+            p_ammo = 1;
+        }
+        update_vision = 1;
+    }
+}
+
+rdn = pad0 & sp_FIRE;
+
+// dejar migas
+if (action == 1 && bread > 0) {
+    if (rdn == 0 && eat == 0) {
+        _t = qtile(p_tx, p_ty);
+        if (_t != 15 && _t != 14) {  
+            bread--;
+            _x = p_tx;
+            _y = p_ty;
+            if (night_mode == 0) _t = 15; else _t = 14;
+            _n = 0;
+            update_tile ();
+            map_buff [p_tx + (p_ty << 4) - p_ty] = 15;
+            bread_tiles[99 - bread].pant = n_pant;
+            bread_tiles[99 - bread].pos = p_tx + (p_ty * 15);
+            print_bread();
+        }
+    } else if (eat == 1) {
+        eat = 0;
+        bread = bread - 10;
+        hungry = hungry + 10;
+        if (hungry > 99) hungry = 99;
+        eat = 0;
+        print_hungry();
+        print_bread();
+    }
+    if (bread <= 0) {
+        objects[0].used = 1;
+    }
+}
+
+if (action == 4 && rdn == 0) {
+    if (n_pant == 20 && p_tx == 12 && p_ty == 4) {
+        _x = 13;
+        _y = 4;
+        _t = 7;
+        update_tile();
+        mark_object_used();
+        doors[0].pant = n_pant;
+        doors[0].pos =  p_tx + (p_ty * 15) + 1;
+    }
+}
+
+if (action == 5 && rdn == 0) {
+    if (n_pant == 13 && p_tx == 5 && p_ty == 4) {
+        _x = 5;
+        _y = 5;
+        _t = 7;
+        update_tile();
+        mark_object_used();
+        doors[1].pant = n_pant;
+        doors[1].pos =  p_tx + ((p_ty + 1) * 15);
+    }
+}
+
+
+
+if (lifes == 0) {
+    //game over
+    game_over();
+    playing = success = 0;
+}
