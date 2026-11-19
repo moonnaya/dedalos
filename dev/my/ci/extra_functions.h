@@ -92,13 +92,12 @@ void print_object() {
 }
 
 void next_object() {
-  if (object_index + 1 >= 5) {
-        object_index = -1;
-    }
-    for (rdb = object_index + 1; rdb < 6; rdb++) {
-        if (objects[rdb].action != 0 && objects[rdb].used == 0) {
-            action = objects[rdb].action;
-            object_index = rdb;
+    for (rdb = 1; rdb <= 6; rdb++) {
+        rdc = object_index + rdb;
+        if (rdc >= 6) rdc -= 6;
+        if (objects[rdc].action != 0 && objects[rdc].used == 0) {
+            action = objects[rdc].action;
+            object_index = rdc;
             print_object();
             break;
         }

@@ -9,3 +9,5 @@ previous_direction = 0;
 lifes = 3;
 first_time = 1;
 esb_warn = 0;
+action = 1;
+print_bread ();

@@ -1,6 +1,11 @@
 // MTE MK1 (la Churrera) v5.0
 // Copyleft 2010-2014, 2020 by the Mojon Twins
-
+// Solo el pan empieza en el inventario. used = 1 significa "no lo tiene";
+// pasa a 0 al recogerlo (ver extra_routines.h)
+objects[1].used = 1;   // escudo
+objects[2].used = 1;   // hacha
+objects[3].used = 1;   // llave azul
+objects[4].used = 1;   // llave amarilla
 
 
 // restart bread tiles
