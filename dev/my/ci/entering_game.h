@@ -8,3 +8,4 @@ player_direction = 0;
 previous_direction = 0;
 lifes = 3;
 first_time = 1;
+esb_warn = 0;

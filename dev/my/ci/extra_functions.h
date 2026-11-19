@@ -87,10 +87,7 @@ void print_object() {
     if (objects[object_index].action == 1) {
       print_bread();
     } else if (objects[object_index].action != 0) {
-        _x = 7;
-        _y = 11;
-        _t = objects[object_index].tile;
-        update_tile(); 
+        hud_tile (7, 11, objects[object_index].tile);
     }
 }
 
@@ -118,92 +115,18 @@ void mark_object_used() {
     }
 }
 
+// Tiles (izquierdo y derecho) del sol/luna para cada sun_position (0..7)
+unsigned char sun_left  [8] = { 19, 20,  0, 24, 22, 23,  0, 21 };
+unsigned char sun_right [8] = {  0, 21, 19, 20,  0, 24, 22, 23 };
+
 void print_time(void) {
-  if (sun_position == 0) {
-    _x = 0;
-    _y = 11;
-    _t = 19;
-    update_tile();
-    _x = 1;
-    _y = 11;
-    _t = 0;
-    update_tile();
-  }
-  if (sun_position == 1) {
-    _x = 0;
-    _y = 11;
-    _t = 20;
-    update_tile();
-    _x = 1;
-    _y = 11;
-    _t = 21;
-    update_tile();
-  }
-  if (sun_position == 2) {
-    _x = 0;
-    _y = 11;
-    _t = 0;
-    update_tile();
-    _x = 1;
-    _y = 11;
-    _t = 19;
-    update_tile();
-  }
-  if (sun_position == 3) {
-    _x = 0;
-    _y = 11;
-    _t = 24;
-    update_tile();
-    _x = 1;
-    _y = 11;
-    _t = 20;
-    update_tile();
-  }
-  if (sun_position == 4) {
-    _x = 0;
-    _y = 11;
-    _t = 22;
-    update_tile();
-    _x = 1;
-    _y = 11;
-    _t = 0;
-    update_tile();
-  }
-  if (sun_position == 5) {
-    _x = 0;
-    _y = 11;
-    _t = 23;
-    update_tile();
-    _x = 1;
-    _y = 11;
-    _t = 24;
-    update_tile();
-  }
-  if (sun_position == 6) {
-    _x = 0;
-    _y = 11;
-    _t = 0;
-    update_tile();
-    _x = 1;
-    _y = 11;
-    _t = 22;
-    update_tile();
-  }
-  if (sun_position == 7) {
-    _x = 0;
-    _y = 11;
-    _t = 21;
-    update_tile();
-    _x = 1;
-    _y = 11;
-    _t = 23;
-    update_tile();
+  if (sun_position < 8) {
+    hud_tile (0, 11, sun_left  [sun_position]);
+    hud_tile (1, 11, sun_right [sun_position]);
   }
 }
 
 void print_bread() {
-  _x = 7;
-  _y = 11;
   if (bread > 75) {
     _t = 25;
   } else if (bread > 50) {
@@ -215,5 +138,55 @@ void print_bread() {
   } else {
     _t = 15;
   }
-  update_tile();
+  hud_tile (7, 11, _t);
+}
+
+// 1 si hay algun esbirro vivo dentro del radio de aviso
+unsigned char esb_near (void) {
+	esb_px = (gpx + 8) >> 4;
+	esb_py = (gpy + 8) >> 4;
+	// con el aviso puesto se exige un tile mas para quitarlo: evita parpadeo
+	esb_r = ESB_WARN_RADIUS + esb_warn;
+
+	for (esb_i = 0; esb_i < MAX_ENEMS; esb_i ++) {
+		esb_t = malotes [enoffs + esb_i].t;
+		// tipo 0 = hueco vacio; bit 4 = enemigo muerto
+		if ((esb_t & 0x0f) == 0 || (esb_t & 0x10)) continue;
+
+		esb_dx = (malotes [enoffs + esb_i].x + 8) >> 4;
+		if (esb_dx >= esb_px) esb_dx -= esb_px; else esb_dx = esb_px - esb_dx;
+		esb_dy = (malotes [enoffs + esb_i].y + 8) >> 4;
+		if (esb_dy >= esb_py) esb_dy -= esb_py; else esb_dy = esb_py - esb_dy;
+
+		if (esb_dx <= esb_r && esb_dy <= esb_r) return 1;
+	}
+	return 0;
+}
+
+void esb_draw_warning (unsigned char on) {
+	// La cara. No uso update_tile: con _y = 11 escribe fuera de map_attr/map_buff
+	_x = ESB_WARN_X; _y = ESB_WARN_Y;
+	if (on) _t = ESB_WARN_TILE; else _t = 0;
+	draw_invalidate_coloured_tile_gamearea ();
+
+	// El texto, a su izquierda
+	_x = ESB_WARN_TXT_X; _y = ESB_WARN_TXT_Y; _t = ESB_WARN_ATTR;
+	if (on) _gp_gen = "Aaaahrg"; else _gp_gen = "       ";
+	print_str ();
+}
+
+void esb_update_warning (void) {
+	esb_now = esb_near ();
+	if (esb_now != esb_warn) {          // solo se pinta al cambiar de estado
+		esb_warn = esb_now;
+		esb_draw_warning (esb_warn);
+	}
+}
+
+// Dibuja un tile en el marcador (filas 10-11 de tiles, fuera del mapa).
+// No usa update_tile: con _y = 11 calcula el indice 15*11 + x = 165..179 y
+// escribe fuera de map_attr (150 bytes), pisando otras variables.
+void hud_tile (unsigned char x, unsigned char y, unsigned char t) {
+  _x = x; _y = y; _t = t;
+  draw_invalidate_coloured_tile_gamearea ();
 }

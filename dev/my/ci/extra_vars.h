@@ -1,5 +1,17 @@
 // MTE MK1 (la Churrera) v5.0
 // Copyleft 2010-2014, 2020 by the Mojon Twins
+// --- Aviso de esbirro cercano (cuadro de mensajes del marcador) ---
+#define ESB_WARN_TILE		26		// tile de la cara. OJO: el 25 es la hogaza de pan
+#define ESB_WARN_RADIUS		3		// radio en tiles (1 = solo las 8 casillas contiguas)
+#define ESB_WARN_X			14		// tile X del marcador: 14 = el de mas a la derecha
+#define ESB_WARN_Y			11		// tile Y: la fila de la seleccion de objetos
+#define ESB_WARN_TXT_X		21		// columna (en caracteres) donde empieza el texto
+#define ESB_WARN_TXT_Y		23		// fila (en caracteres) del texto
+#define ESB_WARN_ATTR		66		// atributo del texto (el mismo que las vidas)
+
+unsigned char esb_warn = 0;
+unsigned char esb_i, esb_t, esb_now, esb_px, esb_py, esb_dx, esb_dy, esb_r;
+
 unsigned char action = 1;   //0 -> nada
                             //1 -> pan
                             //2 -> escudo

@@ -1,12 +1,8 @@
 // MTE MK1 (la Churrera) v5.0
 // Copyleft 2010-2014, 2020 by the Mojon Twins
-  _x = 10; _y = 0; index = p_tx; _n= 4; print_number_wan ();
-  _x = 13; _y = 0; index = p_ty; _n= 5; print_number_wan ();
-  _x = 16; _y = 0; index = player_direction; _n= 4; print_number_wan ();
-   _x = 19; _y = 0; index = previous_direction; _n= 6; print_number_wan ();
-
 
 eat = 0;
+esb_update_warning ();
 gpjt = sp_GetKey ();
 if (gpjt == 'w' && total_objects > 1) {  //migas
     next_object();

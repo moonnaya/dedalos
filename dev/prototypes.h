@@ -140,7 +140,7 @@ void mark_object_used();
 void next_object();
 void fill_screen_axis_y();
 void fill_screen_axis_x();
-
+void hud_tile (unsigned char x, unsigned char y, unsigned char t);
 void print_number_wan (void);
 
 int i, j, index = 0;
