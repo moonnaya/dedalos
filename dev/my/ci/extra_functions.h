@@ -164,15 +164,24 @@ unsigned char esb_near (void) {
 }
 
 void esb_draw_warning (unsigned char on) {
-	// La cara. No uso update_tile: con _y = 11 escribe fuera de map_attr/map_buff
+	// La cara
 	_x = ESB_WARN_X; _y = ESB_WARN_Y;
 	if (on) _t = ESB_WARN_TILE; else _t = 0;
 	draw_invalidate_coloured_tile_gamearea ();
 
-	// El texto, a su izquierda
-	_x = ESB_WARN_TXT_X; _y = ESB_WARN_TXT_Y; _t = ESB_WARN_ATTR;
-	if (on) _gp_gen = "Aaaahrg"; else _gp_gen = "       ";
-	print_str ();
+	if (on) {
+		_x = ESB_WARN_TXT_X; _y = ESB_WARN_TXT_Y; _t = ESB_WARN_ATTR;
+		_gp_gen = "AAAAHRG!";
+		print_str ();
+	} else {
+		// Se borra celda a celda con atributo 0 (tinta negra), como hace
+		// print_lifes, para que no quede nada visible aunque haya basura
+		for (esb_i = 0; esb_i < 8; esb_i ++) {
+			_x = ESB_WARN_TXT_X + esb_i; _y = ESB_WARN_TXT_Y; _t = 0;
+			_gp_gen = " ";
+			print_str ();
+		}
+	}
 }
 
 void esb_update_warning (void) {
