@@ -198,3 +198,87 @@ void hud_tile (unsigned char x, unsigned char y, unsigned char t) {
   _x = x; _y = y; _t = t;
   draw_invalidate_coloured_tile_gamearea ();
 }
+
+void ded_print_page(void) {
+    // 2 lineas de 9 caracteres de la pagina ded_page
+    for (ded_i = 0; ded_i < 2; ded_i++) {
+        for (ded_b = 0; ded_b < 9; ded_b++)
+            ded_buf[ded_b] = ded[ded_cur].msg[ded_page * 18 + ded_i * 9 + ded_b];
+        ded_buf[9] = 0;
+        _x = DED_TXT_X; _y = DED_TXT_Y + ded_i;
+        _t = 66; _gp_gen = ded_buf;
+        print_str();
+    }
+}
+
+void ded_clear(void) {
+    for (ded_i = 0; ded_i < 2; ded_i++) {
+        for (ded_b = 0; ded_b < 9; ded_b++) {
+            _x = DED_TXT_X + ded_b; _y = DED_TXT_Y + ded_i;
+            _t = 0; _gp_gen = " ";
+            print_str();
+        }
+    }
+    hud_tile(14, 11, 0);
+}
+
+// Hace solido a Dedalo (llamar justo despues de draw_scr ())
+void ded_solid(void) {
+    for (ded_i = 0; ded_i < 4; ded_i++)
+        if (ded[ded_i].visitado == 0 && ded[ded_i].pant == n_pant)
+            map_attr[ded[ded_i].pos] = 8;
+}
+
+void ded_update(void) {
+    if (ded_t) {                         // mensaje en curso
+        ded_t--;
+        if (ded_t == 0) {
+            ded_page++;
+            if (ded[ded_cur].msg[ded_page * 18] == 0) {
+                ded_clear();
+                esb_warn = 0;            // que el aviso de esbirro pueda volver
+            } else {
+                ded_t = DED_PAGE_FRAMES;
+                ded_print_page();
+            }
+        }
+        return;
+    }
+    // posicion del jugador en tiles
+    ded_a = (gpx + 8) >> 4;
+    ded_b = (gpy + 8) >> 4;
+    for (ded_cur = 0; ded_cur < 4; ded_cur++) {
+        if (ded[ded_cur].visitado == 0 && ded[ded_cur].pant == n_pant) {
+            // adyacente (incluye diagonales) a la casilla de Dedalo
+            rdx = ded[ded_cur].pos % 15;
+            rdy = ded[ded_cur].pos / 15;
+            rda = ded_a + 1 - rdx;
+            rdb = ded_b + 1 - rdy;
+            if (rda <= 2 && rdb <= 2) {
+                ded[ded_cur].visitado = 1;
+                map_attr[ded[ded_cur].pos] = 0;
+                // dar el objeto
+                rdn = ded[ded_cur].obj;
+                objects[rdn].used = 0;
+                objects[rdn].in_floor = 0;
+                if (objects[rdn].action == 3) p_ammo = 1;
+                action = objects[rdn].action;   // equiparlo al recibirlo
+                object_index = rdn;
+                print_object();                 // pinta el icono en el marcador
+                // punto seguro
+                safe_point.pant = n_pant;
+                safe_point.x = ded_a;
+                safe_point.y = ded_b;
+                safe_point.direction = previous_direction;
+                // cara y texto
+                hud_tile(14, 11, DED_FACE);
+                ded_page = 0;
+                ded_t = DED_PAGE_FRAMES;
+                ded_print_page();
+                update_vision = 1;       // redibuja sin la figura
+                return;
+            }
+        }
+    }
+    ded_cur = 0;
+}

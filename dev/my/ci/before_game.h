@@ -51,3 +51,14 @@ objects[4] = o_key_yellow;
 
 total_objects = 5;
 object_index = 0;
+
+for (rda = 0; rda < 4; rda++) {
+    ded[rda].pant = 255;
+    ded[rda].visitado = 0;
+}
+ded[0].pant = 12;
+ded[0].pos = 28;
+ded[0].obj = 2;
+ded[0].msg = "EL HACHA LIBERA   LAS ALMASDE LOS   POSEIDOS          ";
+// ded[1..3]: rellenar cuando sepas pantalla, posicion, objeto y texto
+ded_t = 0;

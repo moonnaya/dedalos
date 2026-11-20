@@ -110,6 +110,7 @@
 			#include "my/ci/before_entering_screen.h"
 			update_vision = 1;
 			draw_scr ();
+			ded_solid ();
 			update_vision = 0;
 			o_pant = n_pant;
 		}

@@ -421,6 +421,11 @@ void vision() {
 		}
 	}
 
+	for (gpit = 0; gpit < 4; gpit++) {
+		if (ded[gpit].visitado == 0 && ded[gpit].pant == n_pant && pos_in_vision(ded[gpit].pos))
+			screen_flat[ded[gpit].pos] = DED_TILE;
+	}
+
 	// Version nocturna de los tiles (1..6 -> 8..13, 7 -> 16, 15 -> 14, 17 -> 18)
 	if (night_mode == 1) {
 		for (rda = 0; rda < 150; rda++) {

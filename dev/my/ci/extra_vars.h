@@ -8,6 +8,11 @@
 #define ESB_WARN_TXT_X		20		// columna (en caracteres) donde empieza el texto
 #define ESB_WARN_TXT_Y		23		// fila (en caracteres) del texto
 #define ESB_WARN_ATTR		66		// atributo del texto (el mismo que las vidas)
+#define DED_TILE		44		// tile de la figura (OJO: choca con el 44 del mapa)
+#define DED_FACE		28		// tile de la cara en el marcador
+#define DED_TXT_X		20
+#define DED_TXT_Y		22
+#define DED_PAGE_FRAMES	100
 
 unsigned char esb_warn = 0;
 unsigned char esb_i, esb_t, esb_now, esb_px, esb_py, esb_dx, esb_dy, esb_r;
@@ -53,3 +58,16 @@ OBJECT o_key_yellow;
 OBJECT objects[6];
 unsigned char total_objects = 0;
 int object_index = 0;
+
+typedef struct {
+    unsigned char pant;		// pantalla (255 = sin usar)
+    unsigned char pos;		// y*15 + x dentro de la pantalla
+    unsigned char visitado;
+    unsigned char obj;		// indice en objects[]
+    unsigned char *msg;		// paginas de 18 car. (9 + 9)
+} DEDALO;
+
+DEDALO ded[4];
+unsigned char ded_cur = 0, ded_t = 0, ded_page = 0;
+unsigned char ded_a, ded_b, ded_i;
+unsigned char ded_buf[10];
