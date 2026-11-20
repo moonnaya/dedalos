@@ -162,36 +162,6 @@ unsigned char esb_near (void) {
 	return 0;
 }
 
-void esb_draw_warning (unsigned char on) {
-	// La cara
-	_x = ESB_WARN_X; _y = ESB_WARN_Y;
-	if (on) _t = ESB_WARN_TILE; else _t = 0;
-	draw_invalidate_coloured_tile_gamearea ();
-
-	if (on) {
-		_x = ESB_WARN_TXT_X; _y = ESB_WARN_TXT_Y; _t = ESB_WARN_ATTR;
-		_gp_gen = "AAAAHRG!";
-		print_str ();
-	} else {
-		// Se borra celda a celda con atributo 0 (tinta negra), como hace
-		// print_lifes, para que no quede nada visible aunque haya basura
-		for (esb_i = 0; esb_i < 8; esb_i ++) {
-			_x = ESB_WARN_TXT_X + esb_i; _y = ESB_WARN_TXT_Y; _t = 0;
-			_gp_gen = " ";
-			print_str ();
-		}
-	}
-}
-
-void esb_update_warning (void) {
-  if (ded_t) return;                  // no pisar el mensaje de Dedalo
-	esb_now = esb_near ();
-	if (esb_now != esb_warn) {          // solo se pinta al cambiar de estado
-		esb_warn = esb_now;
-		esb_draw_warning (esb_warn);
-	}
-}
-
 // Dibuja un tile en el marcador (filas 10-11 de tiles, fuera del mapa).
 // No usa update_tile: con _y = 11 escribiria fuera de map_attr (150 bytes).
 void hud_tile (unsigned char x, unsigned char y, unsigned char t) {
@@ -230,16 +200,6 @@ void ded_print_page(void) {
     hud_msg (ded[ded_cur].msg + ded_page * 18, DED_FACE);
 }
 
-void ded_clear(void) {
-    for (ded_i = 0; ded_i < 2; ded_i++) {
-        for (ded_b = 0; ded_b < 9; ded_b++) {
-            _x = DED_TXT_X + ded_b; _y = DED_TXT_Y + ded_i;
-            _t = 0; _gp_gen = " ";
-            print_str();
-        }
-    }
-    hud_tile(14, 11, 0);
-}
 
 // Hace solido a Dedalo (llamar justo despues de draw_scr ())
 void ded_solid(void) {

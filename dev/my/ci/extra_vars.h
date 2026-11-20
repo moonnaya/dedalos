@@ -5,6 +5,7 @@
 #define ESB_WARN_RADIUS		3		// radio en tiles (1 = solo las 8 casillas contiguas)
 #define DED_TILE		44		// tile de la figura (OJO: choca con el 44 del mapa)
 #define DED_PAGE_FRAMES	100
+#define DED_FACE		28		// tile de la cara de Dedalo en el marcador
 
 #define HUD_FACE_X		14		// tile X de la cara (el de mas a la derecha)
 #define HUD_FACE_Y		11		// tile Y de la cara
@@ -69,4 +70,4 @@ typedef struct {
 
 DEDALO ded[4];
 unsigned char ded_cur = 0, ded_t = 0, ded_page = 0;
-unsigned char ded_a, ded_i;
+unsigned char ded_a, ded_b, ded_i;
