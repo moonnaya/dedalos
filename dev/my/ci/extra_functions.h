@@ -184,6 +184,7 @@ void esb_draw_warning (unsigned char on) {
 }
 
 void esb_update_warning (void) {
+  if (ded_t) return;                  // no pisar el mensaje de Dedalo
 	esb_now = esb_near ();
 	if (esb_now != esb_warn) {          // solo se pinta al cambiar de estado
 		esb_warn = esb_now;

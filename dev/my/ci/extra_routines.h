@@ -2,7 +2,6 @@
 // Copyleft 2010-2014, 2020 by the Mojon Twins
 
 eat = 0;
-if (ded_t) return;
 esb_update_warning ();
 ded_update ();
 gpjt = sp_GetKey ();
