@@ -49,6 +49,11 @@ objects[2] = o_axe;
 objects[3] = o_key_blue;
 objects[4] = o_key_yellow;
 
+objects[1].used = 1;   // escudo
+objects[2].used = 1;   // hacha
+objects[3].used = 1;   // llave azul
+objects[4].used = 1;   // llave amarilla
+
 total_objects = 5;
 object_index = 0;
 

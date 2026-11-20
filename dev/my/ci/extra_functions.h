@@ -193,23 +193,41 @@ void esb_update_warning (void) {
 }
 
 // Dibuja un tile en el marcador (filas 10-11 de tiles, fuera del mapa).
-// No usa update_tile: con _y = 11 calcula el indice 15*11 + x = 165..179 y
-// escribe fuera de map_attr (150 bytes), pisando otras variables.
+// No usa update_tile: con _y = 11 escribiria fuera de map_attr (150 bytes).
 void hud_tile (unsigned char x, unsigned char y, unsigned char t) {
   _x = x; _y = y; _t = t;
   draw_invalidate_coloured_tile_gamearea ();
 }
 
+// Cuadro de mensajes del marcador: cara + 2 lineas de 9 caracteres.
+// s = texto (los huecos que falten hasta 18 se rellenan con espacios),
+// o 0 para borrar. face = tile de la cara, 0 = sin cara.
+void hud_msg (unsigned char *s, unsigned char face) {
+	hud_tile (HUD_FACE_X, HUD_FACE_Y, face);
+	hud_ch[1] = 0;
+	for (hud_k = 0; hud_k < 18; hud_k ++) {
+		hud_ch[0] = 32;
+		if (s && *s) { hud_ch[0] = *s; s ++; }
+		_x = HUD_MSG_X + hud_k; _y = HUD_MSG_Y;
+		if (hud_k >= 9) { _x -= 9; _y ++; }
+		if (hud_ch[0] == 32) _t = 0; else _t = HUD_MSG_ATTR;
+		_gp_gen = hud_ch;
+		print_str ();
+	}
+}
+
+void esb_update_warning (void) {
+	if (ded_t) return;                  // no pisar el mensaje de Dedalo
+	esb_now = esb_near ();
+	if (esb_now != esb_warn) {          // solo se pinta al cambiar de estado
+		esb_warn = esb_now;
+		if (esb_warn) hud_msg ("         AAAAHRG!", ESB_WARN_TILE);  // 2a linea
+		else hud_msg (0, 0);
+	}
+}
+
 void ded_print_page(void) {
-    // 2 lineas de 9 caracteres de la pagina ded_page
-    for (ded_i = 0; ded_i < 2; ded_i++) {
-        for (ded_b = 0; ded_b < 9; ded_b++)
-            ded_buf[ded_b] = ded[ded_cur].msg[ded_page * 18 + ded_i * 9 + ded_b];
-        ded_buf[9] = 0;
-        _x = DED_TXT_X; _y = DED_TXT_Y + ded_i;
-        _t = 66; _gp_gen = ded_buf;
-        print_str();
-    }
+    hud_msg (ded[ded_cur].msg + ded_page * 18, DED_FACE);
 }
 
 void ded_clear(void) {
@@ -236,7 +254,7 @@ void ded_update(void) {
         if (ded_t == 0) {
             ded_page++;
             if (ded[ded_cur].msg[ded_page * 18] == 0) {
-                ded_clear();
+                hud_msg (0, 0);
                 esb_warn = 0;            // que el aviso de esbirro pueda volver
             } else {
                 ded_t = DED_PAGE_FRAMES;
@@ -271,8 +289,6 @@ void ded_update(void) {
                 safe_point.x = ded_a;
                 safe_point.y = ded_b;
                 safe_point.direction = previous_direction;
-                // cara y texto
-                hud_tile(14, 11, DED_FACE);
                 ded_page = 0;
                 ded_t = DED_PAGE_FRAMES;
                 ded_print_page();
