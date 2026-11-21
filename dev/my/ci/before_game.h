@@ -65,5 +65,8 @@ ded[0].pant = 12;
 ded[0].pos = 28;
 ded[0].obj = 2;
 ded[0].msg = "EL HACHA LIBERA   LAS ALMASDE LOS   POSEIDOS          ";
-// ded[1..3]: rellenar cuando sepas pantalla, posicion, objeto y texto
+ded[1].pant = 14;
+ded[1].pos = 123;          
+ded[1].obj = 3;            // llave azul
+ded[1].msg = "LA LLAVE DE LA    BESTIA.  CUIDA TUSESPALDAS          ";
 ded_t = 0;
