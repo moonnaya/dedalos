@@ -70,6 +70,7 @@ typedef struct {
     unsigned char visitado;
     unsigned char obj;		// indice en objects[]
     unsigned char *msg;		// paginas de 18 car. (9 + 9)
+    unsigned char almas;	// almas que hay que liberar antes de que aparezca
 } DEDALO;
 
 DEDALO ded[4];
@@ -77,6 +78,6 @@ unsigned char ded_cur = 0, ded_t = 0, ded_page = 0;
 unsigned char ded_a, ded_b, ded_i;
 
 // El laberinto se abre al conseguir la llave amarilla (ultimo Dedalo)
-unsigned char maze_pant[4] = { 23, 22, 17, 29 };
-unsigned char maze_pos[4]  = { 78, 127, 131, 18 };   // y*15 + x: (3,5) (7,8) (11,8) (3,1)
-unsigned char maze_open[4] = { 7, 17, 7, 7 };        // suelo que queda al abrir
+unsigned char maze_pant[5] = { 23, 22, 17, 29, 29 };
+unsigned char maze_pos[5]  = { 78, 127, 131, 18, 102 };   // y*15 + x: (3,5) (7,8) (11,8) (3,1) (12,6)
+unsigned char maze_open[5] = { 7, 17, 7, 7, 7 };          // suelo que queda al abrir

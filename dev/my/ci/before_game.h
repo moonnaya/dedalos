@@ -60,7 +60,11 @@ object_index = 0;
 for (rda = 0; rda < 4; rda++) {
     ded[rda].pant = 255;
     ded[rda].visitado = 0;
+    ded[rda].almas = 0;
 }
+
+
+
 ded[0].pant = 12;
 ded[0].pos = 28;
 ded[0].obj = 2;
@@ -73,6 +77,7 @@ ded[2].pant = 9;
 ded[2].pos = 118;          // y*15 + x = 7*15 + 13
 ded[2].obj = 1;            // escudo (acción 2)
 ded[2].msg = "EL ESCUDODETECTA  EL       CORAZON  DE LA    BESTIA Y LA       DETIENE  ";
+ded[2].almas = 15;         // el escudo: hacen falta 15 almas liberadas
 ded[3].pant = 5;
 ded[3].pos = 54;           // y*15 + x = 3*15 + 9
 ded[3].obj = 4;            // llave amarilla (acción 5)

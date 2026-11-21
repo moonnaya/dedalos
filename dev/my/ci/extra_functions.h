@@ -208,6 +208,12 @@ void ded_solid(void) {
             map_attr[ded[ded_i].pos] = 8;
 }
 
+void ded_solid(void) {
+    for (ded_i = 0; ded_i < 4; ded_i++)
+        if (ded_here (ded_i))
+            map_attr[ded[ded_i].pos] = 8;
+}
+
 void ded_update(void) {
     if (ded_t) {                         // mensaje en curso
         ded_t--;
@@ -227,7 +233,7 @@ void ded_update(void) {
     ded_a = (gpx + 8) >> 4;
     ded_b = (gpy + 8) >> 4;
     for (ded_cur = 0; ded_cur < 4; ded_cur++) {
-        if (ded[ded_cur].visitado == 0 && ded[ded_cur].pant == n_pant) {
+        if (ded_here (ded_cur)) {
             // adyacente (incluye diagonales) a la casilla de Dedalo
             rdx = ded[ded_cur].pos % 15;
             rdy = ded[ded_cur].pos / 15;
@@ -281,7 +287,7 @@ void door_check (void) {
 
 // open = 1: abre los pasos nuevos; open = 0: los vuelve a cerrar (pared = tile 1)
 void maze_set (unsigned char open) {
-	for (rda = 0; rda < 4; rda ++) {
+	for (rda = 0; rda < 5; rda ++) {
 		if (open) mapa[maze_pant[rda] * 150 + maze_pos[rda]] = maze_open[rda];
 		else mapa[maze_pant[rda] * 150 + maze_pos[rda]] = 1;
 	}

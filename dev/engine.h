@@ -342,6 +342,12 @@ unsigned char pos_in_vision(unsigned char pos) {
 	return 1;
 }
 
+// 1 si el Dedalo i esta presente: sin visitar, en esta pantalla y con las almas liberadas
+unsigned char ded_here (unsigned char i) {
+	if (ded[i].visitado == 0 && ded[i].pant == n_pant && p_killed >= ded[i].almas) return 1;
+	return 0;
+}
+
 void vision() {
 	update_vision = 0;
 
@@ -416,7 +422,7 @@ void vision() {
 	}
 
 	for (gpit = 0; gpit < 4; gpit++) {
-		if (ded[gpit].visitado == 0 && ded[gpit].pant == n_pant && pos_in_vision(ded[gpit].pos))
+		if (ded_here (gpit) && pos_in_vision (ded[gpit].pos))
 			screen_flat[ded[gpit].pos] = DED_TILE;
 	}
 

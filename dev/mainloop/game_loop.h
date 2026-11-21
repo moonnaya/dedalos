@@ -176,20 +176,22 @@
 			simple_coco_update ();
 		#endif
 
-		if (p_life > 1) {
-			player_kill (p_killme);
-			n_pant = safe_point.pant;
-			gpx = safe_point.x << 4; p_x = gpx << FIXBITS;
-			gpy = safe_point.y << 4; p_y = gpy << FIXBITS;
-			p_tx = gpx >> 4;
-			p_ty = gpy >> 4;
-			player_direction = safe_point.direction;
-			previous_direction = safe_point.direction;
-			o_pant = 0xff;                 // recarga la pantalla y los enemigos
-			update_vision = 1;
-			print_lifes();
-			#include "my/ci/on_player_killed.h"
-		} else playing = 0;
+		if (p_killme) {
+			if (p_life > 1) {
+				player_kill (p_killme);
+				n_pant = safe_point.pant;
+				gpx = safe_point.x << 4; p_x = gpx << FIXBITS;
+				gpy = safe_point.y << 4; p_y = gpy << FIXBITS;
+				p_tx = gpx >> 4;
+				p_ty = gpy >> 4;
+				player_direction = safe_point.direction;
+				previous_direction = safe_point.direction;
+				o_pant = 0xff;                 // recarga la pantalla y los enemigos
+				update_vision = 1;
+				print_lifes();
+				#include "my/ci/on_player_killed.h"
+			} else playing = 0;
+		}
 
 		#ifdef PLAYER_CAN_FIRE
 			// Move bullets 			
