@@ -60,12 +60,9 @@ void update_time(void) {
 		}
 	}
 	if (hungry == 0) {
-		lifes--;
-		//indicar mensaje
-		//retornar a punto de salvado.
 		hungry = 50;
-		print_lifes();
-		if (lifes > 0) print_hungry();
+		print_hungry();
+		p_killme = 4;                     // pasa por la misma muerte: baja p_life y vuelve al safe point
 	}
 }
 
@@ -247,6 +244,7 @@ void ded_update(void) {
                 action = objects[rdn].action;   // equiparlo al recibirlo
                 object_index = rdn;
                 print_object();                 // pinta el icono en el marcador
+                if (rdn == 4) maze_set (1);     // llave amarilla: se abre el laberinto
                 // punto seguro
                 safe_point.pant = n_pant;
                 safe_point.x = ded_a;
@@ -278,5 +276,13 @@ void door_check (void) {
 		update_tile ();
 		mark_object_used ();                           // gasta la llave
 		update_vision = 1;
+	}
+}
+
+// open = 1: abre los pasos nuevos; open = 0: los vuelve a cerrar (pared = tile 1)
+void maze_set (unsigned char open) {
+	for (rda = 0; rda < 4; rda ++) {
+		if (open) mapa[maze_pant[rda] * 150 + maze_pos[rda]] = maze_open[rda];
+		else mapa[maze_pant[rda] * 150 + maze_pos[rda]] = 1;
 	}
 }

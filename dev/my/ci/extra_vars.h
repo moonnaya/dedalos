@@ -12,7 +12,7 @@
 #define HUD_MSG_X		20		// columna (en caracteres) del texto
 #define HUD_MSG_Y		22		// fila de la primera linea (la segunda es 23)
 #define HUD_MSG_ATTR	66		// atributo de las letras
-#define HUNGER_SECONDS	10		// segundos por cada punto de hambre
+#define HUNGER_SECONDS	5		// segundos por cada punto de hambre
 unsigned char hunger_sec = 0;
 unsigned char hud_ch[2] = {0, 0};
 unsigned char hud_k;
@@ -75,3 +75,8 @@ typedef struct {
 DEDALO ded[4];
 unsigned char ded_cur = 0, ded_t = 0, ded_page = 0;
 unsigned char ded_a, ded_b, ded_i;
+
+// El laberinto se abre al conseguir la llave amarilla (ultimo Dedalo)
+unsigned char maze_pant[4] = { 23, 22, 17, 29 };
+unsigned char maze_pos[4]  = { 78, 127, 131, 18 };   // y*15 + x: (3,5) (7,8) (11,8) (3,1)
+unsigned char maze_open[4] = { 7, 17, 7, 7 };        // suelo que queda al abrir
