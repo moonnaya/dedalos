@@ -48,22 +48,25 @@ void print_hungry() {
 }
 
 void update_time(void) {
-	cuentafaps ++; if (cuentafaps == 25 && segundos >= 0) { cuentafaps = 0; segundos --; }
-  if (segundos != prev_seg) {
-    prev_seg = segundos;
-    if (segundos % 10 == 0) {
-        hungry--;
-        if (lifes > 0) print_hungry();
-    }
-  }
-  if (hungry == 0) {
-      lifes--;
-      //indicar mensaje
-      //retornar a punto de salvado.
-      hungry = 50;
-      print_lifes();
-      if (lifes > 0) print_hungry();
-  }
+	cuentafaps ++;
+	if (cuentafaps == 25) {              // pasa un segundo
+		cuentafaps = 0;
+		segundos --;
+		hunger_sec ++;
+		if (hunger_sec >= HUNGER_SECONDS) {
+			hunger_sec = 0;
+			hungry --;
+			if (lifes > 0) print_hungry();
+		}
+	}
+	if (hungry == 0) {
+		lifes--;
+		//indicar mensaje
+		//retornar a punto de salvado.
+		hungry = 50;
+		print_lifes();
+		if (lifes > 0) print_hungry();
+	}
 }
 
 void print_lifes() {
@@ -260,17 +263,17 @@ void ded_update(void) {
     ded_cur = 0;
 }
 
-// Abre la puerta de la llave equipada (4 = azul, 5 = amarilla) si estas
-// justo al lado (en cruz) de ella.
 void door_check (void) {
 	if (action < 4 || action > 5) return;
 	rda = action - 4;                                  // 0 azul, 1 amarilla
-	if (door_pant[rda] != n_pant || (doors_open & (rda + 1))) return;
+	if (door_pant[rda] != n_pant) return;
+	door_i = n_pant * 150 + door_pos[rda];
+	if (mapa[door_i] == 7) return;                     // ya abierta
 	rdx = (gpx + 8) >> 4; rdy = (gpy + 8) >> 4;        // tile del jugador
 	rdb = door_pos[rda] % 15; rdc = door_pos[rda] / 15; // tile de la puerta
 	if ((rdx == rdb && (rdy + 1 == rdc || rdy == rdc + 1)) ||
 	    (rdy == rdc && (rdx + 1 == rdb || rdx == rdb + 1))) {
-		doors_open |= rda + 1;
+		mapa[door_i] = 7;                              // abierta para siempre
 		_x = rdb; _y = rdc; _t = 7; _n = 0;
 		update_tile ();
 		mark_object_used ();                           // gasta la llave

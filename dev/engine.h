@@ -408,11 +408,6 @@ void vision() {
 		}
 	}
 
-	for (gpit = 0; gpit < 2; gpit++) {
-		if ((doors_open & (gpit + 1)) && door_pant[gpit] == n_pant && pos_in_vision(door_pos[gpit]))
-			screen_flat[door_pos[gpit]] = 7;
-	}
-
 	for (gpit = 0; gpit < 6; gpit++) {
 		if (objects[gpit].in_floor == 1 && objects[gpit].pant == n_pant) {
 			rdn = objects[gpit].x + (objects[gpit].y * 15);

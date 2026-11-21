@@ -14,7 +14,8 @@ for (rda = 0; rda < 100; rda++) {
     bread_tiles[rda].pos = 0; 
 }
 
-doors_open = 0;
+// puertas cerradas: azul = tile 35 (indice 0), amarilla = tile 34 (indice 1)
+for (rda = 0; rda < 2; rda++) mapa[door_pant[rda] * 150 + door_pos[rda]] = 35 - rda;
 
 safe_point.pant = 0;
 safe_point.x = 1;

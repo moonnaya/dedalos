@@ -5,7 +5,7 @@
 update_time();
 
 if (segundos == 0) {
-    segundos = 4;
+    segundos = 120;
     sun_position++;
     if (sun_position > 7) {
         sun_position = 0;

@@ -12,6 +12,8 @@
 #define HUD_MSG_X		20		// columna (en caracteres) del texto
 #define HUD_MSG_Y		22		// fila de la primera linea (la segunda es 23)
 #define HUD_MSG_ATTR	66		// atributo de las letras
+#define HUNGER_SECONDS	10		// segundos por cada punto de hambre
+unsigned char hunger_sec = 0;
 unsigned char hud_ch[2] = {0, 0};
 unsigned char hud_k;
 
@@ -40,7 +42,7 @@ typedef struct {
 MARKED_TILE bread_tiles [100];
 unsigned char door_pant[2] = { 20, 29 };
 unsigned char door_pos[2]  = { 73, 58 };   // y*15 + x: (13,4) y (13,3)
-unsigned char doors_open = 0;              // bit 0 = azul abierta, bit 1 = amarilla
+unsigned int  door_i;                      // indice en mapa[]
 
 typedef struct {
     unsigned char action;
