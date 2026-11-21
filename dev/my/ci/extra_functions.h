@@ -259,3 +259,21 @@ void ded_update(void) {
     }
     ded_cur = 0;
 }
+
+// Abre la puerta de la llave equipada (4 = azul, 5 = amarilla) si estas
+// justo al lado (en cruz) de ella.
+void door_check (void) {
+	if (action < 4 || action > 5) return;
+	rda = action - 4;                                  // 0 azul, 1 amarilla
+	if (door_pant[rda] != n_pant || (doors_open & (rda + 1))) return;
+	rdx = (gpx + 8) >> 4; rdy = (gpy + 8) >> 4;        // tile del jugador
+	rdb = door_pos[rda] % 15; rdc = door_pos[rda] / 15; // tile de la puerta
+	if ((rdx == rdb && (rdy + 1 == rdc || rdy == rdc + 1)) ||
+	    (rdy == rdc && (rdx + 1 == rdb || rdx == rdb + 1))) {
+		doors_open |= rda + 1;
+		_x = rdb; _y = rdc; _t = 7; _n = 0;
+		update_tile ();
+		mark_object_used ();                           // gasta la llave
+		update_vision = 1;
+	}
+}

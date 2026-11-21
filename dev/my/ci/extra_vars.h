@@ -38,7 +38,9 @@ typedef struct {
 } MARKED_TILE;
 
 MARKED_TILE bread_tiles [100];
-MARKED_TILE doors[2];
+unsigned char door_pant[2] = { 20, 29 };
+unsigned char door_pos[2]  = { 73, 58 };   // y*15 + x: (13,4) y (13,3)
+unsigned char doors_open = 0;              // bit 0 = azul abierta, bit 1 = amarilla
 
 typedef struct {
     unsigned char action;

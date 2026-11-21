@@ -65,31 +65,7 @@ if (action == 1 && bread > 0) {
     }
 }
 
-if (action == 4 && rdn == 0) {
-    if (n_pant == 20 && p_tx == 12 && p_ty == 4) {
-        _x = 13;
-        _y = 4;
-        _t = 7;
-        update_tile();
-        mark_object_used();
-        doors[0].pant = n_pant;
-        doors[0].pos =  p_tx + (p_ty * 15) + 1;
-    }
-}
-
-if (action == 5 && rdn == 0) {
-    if (n_pant == 13 && p_tx == 5 && p_ty == 4) {
-        _x = 5;
-        _y = 5;
-        _t = 7;
-        update_tile();
-        mark_object_used();
-        doors[1].pant = n_pant;
-        doors[1].pos =  p_tx + ((p_ty + 1) * 15);
-    }
-}
-
-
+door_check ();
 
 if (lifes == 0) {
     //game over

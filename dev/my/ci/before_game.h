@@ -14,8 +14,7 @@ for (rda = 0; rda < 100; rda++) {
     bread_tiles[rda].pos = 0; 
 }
 
-doors[0].pant = 255;
-doors[1].pant = 255;
+doors_open = 0;
 
 safe_point.pant = 0;
 safe_point.x = 1;
