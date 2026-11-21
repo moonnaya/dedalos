@@ -1,40 +1,20 @@
 // MTE MK1 (la Churrera) v5.0
 // Copyleft 2010-2014, 2020 by the Mojon Twins
-void print_number_wan (void) {
-  rda = 16 + (index / 10); rdb = 16 + (index % 10);
-  #asm
-      ; enter:  A = row position (0..23)
-      ;         C = col position (0..31/63)
-      ;         D = pallette #
-      ;         E = graphic #
 
-      ld  a, (_rda)
-      ld  e, a
+unsigned char map_b;
 
-      ld  a, (__n)
-      ld  d, a
-      
-      ld  a, (__x)
-      ld  c, a
+// tile de la posicion i del mapa (pantalla * 150 + y * 15 + x)
+unsigned char map_get (unsigned int i) {
+	map_b = mapa [i >> 1];
+	if (i & 1) map_b &= 15; else map_b >>= 4;
+	return map_tab [map_b];
+}
 
-      ld  a, (__y)
-
-      call SPPrintAtInv
-
-      ld  a, (_rdb)
-      ld  e, a
-
-      ld  a, (__n)
-      ld  d, a
-      
-      ld  a, (__x)
-      inc a
-      ld  c, a
-
-      ld  a, (__y)
-
-      call SPPrintAtInv
-  #endasm
+// escribe un tile (tiene que existir en el mapa, para estar en map_tab)
+void map_set (unsigned int i, unsigned char t) {
+	for (map_b = 0; map_b < 16; map_b ++) if (map_tab [map_b] == t) break;
+	if (i & 1) mapa [i >> 1] = (mapa [i >> 1] & 0xF0) | map_b;
+	else mapa [i >> 1] = (mapa [i >> 1] & 0x0F) | (map_b << 4);
 }
 
 void print_hungry() {
@@ -50,6 +30,7 @@ void print_hungry() {
 void update_time(void) {
 	cuentafaps ++;
 	if (cuentafaps == 25) {              // pasa un segundo
+        if (min_t) { min_t --; if (min_t == 0 && min_state == 3) min_state = 2; }
 		cuentafaps = 0;
 		segundos --;
 		hunger_sec ++;
@@ -200,21 +181,73 @@ void ded_print_page(void) {
     hud_msg (ded[ded_cur].msg + ded_page * 18, DED_FACE);
 }
 
-
-// Hace solido a Dedalo (llamar justo despues de draw_scr ())
-void ded_solid(void) {
-    for (ded_i = 0; ded_i < 4; ded_i++)
-        if (ded[ded_i].visitado == 0 && ded[ded_i].pant == n_pant)
-            map_attr[ded[ded_i].pos] = 8;
-}
-
 void ded_solid(void) {
     for (ded_i = 0; ded_i < 4; ded_i++)
         if (ded_here (ded_i))
             map_attr[ded[ded_i].pos] = 8;
 }
 
+// casilla bloqueada (pared o fuera de pantalla)
+unsigned char min_blocked (unsigned char x, unsigned char y) {
+	if (x > 14 || y > 9) return 1;
+	return behs [map_get (n_pant * 150 + y * 15 + x)] == 8;
+}
+
+// mueve 1 px en la direccion d si la casilla de delante esta libre
+unsigned char min_step (unsigned char d) {
+	min_tx = _en_x; min_ty = _en_y;
+	if (d == 0) min_ty += 16;
+	else if (d == 1) min_ty --;
+	else if (d == 2) min_tx --;
+	else min_tx += 16;
+	if (min_blocked (min_tx >> 4, min_ty >> 4)) return 0;
+	if (d == 0) _en_y ++;
+	else if (d == 1) _en_y --;
+	else if (d == 2) _en_x --;
+	else _en_x ++;
+	return 1;
+}
+
+// persecucion: en el centro de cada casilla elige la salida libre
+// que mas acerca al jugador (no da la vuelta salvo en callejon sin salida)
+void min_move (void) {
+	for (min_i = 0; min_i < MIN_SPEED; min_i ++) {
+		if (((_en_x | _en_y) & 15) == 0) {
+			min_px = (gpx + 8) >> 4; min_py = (gpy + 8) >> 4;
+			min_best = 255; min_nd = min_dir ^ 1;
+			for (min_d = 0; min_d < 4; min_d ++) {
+				if (min_d == (min_dir ^ 1)) continue;
+				min_tx = _en_x >> 4; min_ty = _en_y >> 4;
+				if (min_d == 0) min_ty ++;
+				else if (min_d == 1) min_ty --;
+				else if (min_d == 2) min_tx --;
+				else min_tx ++;
+				if (min_blocked (min_tx, min_ty)) continue;
+				if (min_tx > min_px) min_dist = min_tx - min_px; else min_dist = min_px - min_tx;
+				if (min_ty > min_py) min_dist += min_ty - min_py; else min_dist += min_py - min_ty;
+				if (min_dist < min_best) { min_best = min_dist; min_nd = min_d; }
+			}
+			min_dir = min_nd;
+		}
+		min_step (min_dir);
+	}
+}
+
+// 1 si el minotauro esta delante del jugador (segun hacia donde mira)
+unsigned char min_front (void) {
+	if (previous_direction == 0) return _en_y > gpy;
+	if (previous_direction == 1) return _en_y < gpy;
+	if (previous_direction == 2) return _en_x < gpx;
+	return _en_x > gpx;
+}
+
 void ded_update(void) {
+    if (min_say) {                       // el minotauro choco con el escudo: Dedalo avisa
+        min_say = 0;
+        ded_cur = 4; ded_page = 0; ded_t = DED_PAGE_FRAMES;
+        ded_print_page();
+        return;
+    }
     if (ded_t) {                         // mensaje en curso
         ded_t--;
         if (ded_t == 0) {
@@ -251,6 +284,7 @@ void ded_update(void) {
                 object_index = rdn;
                 print_object();                 // pinta el icono en el marcador
                 if (rdn == 4) maze_set (1);     // llave amarilla: se abre el laberinto
+                if (rdn == 1) { min_state = 1; beep_fx (3); }   // escudo: se arma el minotauro y suena el aviso
                 // punto seguro
                 safe_point.pant = n_pant;
                 safe_point.x = ded_a;
@@ -272,12 +306,12 @@ void door_check (void) {
 	rda = action - 4;                                  // 0 azul, 1 amarilla
 	if (door_pant[rda] != n_pant) return;
 	door_i = n_pant * 150 + door_pos[rda];
-	if (mapa[door_i] == 7) return;                     // ya abierta
+	if (map_get (door_i) == 7) return;                    // ya abierta
 	rdx = (gpx + 8) >> 4; rdy = (gpy + 8) >> 4;        // tile del jugador
 	rdb = door_pos[rda] % 15; rdc = door_pos[rda] / 15; // tile de la puerta
 	if ((rdx == rdb && (rdy + 1 == rdc || rdy == rdc + 1)) ||
 	    (rdy == rdc && (rdx + 1 == rdb || rdx == rdb + 1))) {
-		mapa[door_i] = 7;                              // abierta para siempre
+		map_set (door_i, 7);                              // abierta para siempre
 		_x = rdb; _y = rdc; _t = 7; _n = 0;
 		update_tile ();
 		mark_object_used ();                           // gasta la llave
@@ -288,7 +322,7 @@ void door_check (void) {
 // open = 1: abre los pasos nuevos; open = 0: los vuelve a cerrar (pared = tile 1)
 void maze_set (unsigned char open) {
 	for (rda = 0; rda < 5; rda ++) {
-		if (open) mapa[maze_pant[rda] * 150 + maze_pos[rda]] = maze_open[rda];
-		else mapa[maze_pant[rda] * 150 + maze_pos[rda]] = 1;
+		if (open) map_set (maze_pant[rda] * 150 + maze_pos[rda], maze_open[rda]);
+		else map_set (maze_pant[rda] * 150 + maze_pos[rda], 1);
 	}
 }

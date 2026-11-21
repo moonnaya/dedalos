@@ -15,7 +15,7 @@ for (rda = 0; rda < 100; rda++) {
 }
 
 // puertas cerradas: azul = tile 35 (indice 0), amarilla = tile 34 (indice 1)
-for (rda = 0; rda < 2; rda++) mapa[door_pant[rda] * 150 + door_pos[rda]] = 35 - rda;
+for (rda = 0; rda < 2; rda++) map_set (door_pant[rda] * 150 + door_pos[rda], 35 - rda);
 
 safe_point.pant = 0;
 safe_point.x = 1;
@@ -63,12 +63,12 @@ for (rda = 0; rda < 4; rda++) {
     ded[rda].almas = 0;
 }
 
-
+ded[2].almas = 15;         // el escudo: hacen falta 15 almas liberadas
 
 ded[0].pant = 12;
 ded[0].pos = 28;
 ded[0].obj = 2;
-ded[0].msg = "EL HACHA LIBERA   LAS ALMASDE LOS   POSEIDOS          ";
+ded[0].msg = "EL HACHA LIBERA   LAS ALMASDE LOS   POSEIDOS. LIBERA 15 ALMAS          ";
 ded[1].pant = 14;
 ded[1].pos = 123;          
 ded[1].obj = 3;            // llave azul
@@ -76,8 +76,7 @@ ded[1].msg = "LA LLAVE DE LA    BESTIA.  CUIDA TUSESPALDAS          ";
 ded[2].pant = 9;
 ded[2].pos = 118;          // y*15 + x = 7*15 + 13
 ded[2].obj = 1;            // escudo (acción 2)
-ded[2].msg = "EL ESCUDODETECTA  EL       CORAZON  DE LA    BESTIA Y LA       DETIENE  ";
-ded[2].almas = 15;         // el escudo: hacen falta 15 almas liberadas
+ded[2].msg = "EL ESCUDODETECTA  EL       CORAZON  DE LA    BESTIA Y LA       DETIENE  CUIDADO  VIENE PORTU       IZQUIERDA";
 ded[3].pant = 5;
 ded[3].pos = 54;           // y*15 + x = 3*15 + 9
 ded[3].obj = 4;            // llave amarilla (acción 5)

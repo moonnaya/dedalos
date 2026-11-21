@@ -13,6 +13,14 @@
 #define HUD_MSG_Y		22		// fila de la primera linea (la segunda es 23)
 #define HUD_MSG_ATTR	66		// atributo de las letras
 #define HUNGER_SECONDS	5		// segundos por cada punto de hambre
+#define MIN_PANT		15
+#define MIN_X			14
+#define MIN_Y			1
+#define MIN_SPEED		4		// px por frame (el jugador va a 3)
+#define MIN_STUN_SECS	10
+unsigned char min_state = 0;	// 0 no activo, 1 armado, 2 persigue, 3 aturdido, 4 terminado
+unsigned char min_dir = 2, min_t = 0, min_say = 0;	// 0 abajo, 1 arriba, 2 izq, 3 der
+unsigned char min_i, min_d, min_nd, min_tx, min_ty, min_px, min_py, min_dist, min_best;
 unsigned char hunger_sec = 0;
 unsigned char hud_ch[2] = {0, 0};
 unsigned char hud_k;
@@ -73,7 +81,7 @@ typedef struct {
     unsigned char almas;	// almas que hay que liberar antes de que aparezca
 } DEDALO;
 
-DEDALO ded[4];
+DEDALO ded[5];
 unsigned char ded_cur = 0, ded_t = 0, ded_page = 0;
 unsigned char ded_a, ded_b, ded_i;
 

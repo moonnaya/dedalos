@@ -286,52 +286,22 @@ unsigned char isWall(unsigned char tile) {
 	if (behs[tile] == 8) return 1; else return 0;
 }
 
-/*
 void fill_screen_axis_y() {
 	rdb = (rda * 15) + p_tx;
 	i = rdb + (150 * n_pant);
-	screen_flat[rdb] = mapa[i];
-	if (rdb - 1 >= 0) {
-		screen_flat[rdb - 1] = mapa[i - 1];
-	}
-	if (rdb + 1 < 150) {
-		screen_flat[rdb + 1] = mapa[i + 1];
-	}
-
-}*/
-
- /*
-void fill_screen_axis_x() {
-	rdb = p_ty * 15;
-	i = rdb + rda + (n_pant * 150);
-	rdc = rda + rdb;
-	screen_flat[rdc] = mapa[i];
-	if (rdc - 15 >= 0) {
-		screen_flat[rdc - 15] = mapa[i - 15];
-	}
-	if (rdc + 15 < 150) {
-		screen_flat[rdc + 15] = mapa[i + 15];
-	}
-}
-
-*/
-
-void fill_screen_axis_y() {
-	rdb = (rda * 15) + p_tx;
-	i = rdb + (150 * n_pant);
-	screen_flat[rdb] = mapa[i];
+	screen_flat[rdb] = map_get (i);
 	// Se comprueba la columna, no rdb: si no, en los bordes se cuela la fila vecina
-	if (p_tx > 0) screen_flat[rdb - 1] = mapa[i - 1];
-	if (p_tx < 14) screen_flat[rdb + 1] = mapa[i + 1];
+	if (p_tx > 0) screen_flat[rdb - 1] = map_get (i - 1);
+	if (p_tx < 14) screen_flat[rdb + 1] = map_get (i + 1);
 }
 
 void fill_screen_axis_x() {
 	rdb = p_ty * 15;
 	i = rdb + rda + (n_pant * 150);
 	rdc = rda + rdb;
-	screen_flat[rdc] = mapa[i];
-	if (p_ty > 0) screen_flat[rdc - 15] = mapa[i - 15];
-	if (p_ty < 9) screen_flat[rdc + 15] = mapa[i + 15];
+	screen_flat[rdc] = map_get (i);
+	if (p_ty > 0) screen_flat[rdc - 15] = map_get (i - 15);
+	if (p_ty < 9) screen_flat[rdc + 15] = map_get (i + 15);
 }
 
 // 1 si la posicion (x + y * 15) cae dentro de la zona que ve el jugador
