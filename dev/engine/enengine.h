@@ -568,7 +568,9 @@ void enems_move (void) {
 									objects[2].y = _y;
 									objects[2].in_floor = 1;
 									objects[2].old_tile = qtile(_x, _y);
-									update_tile();			
+									_n = 0;                  // suelo: sin esto sale _n del hambre (4 = mata)
+									update_tile();
+									update_vision = 1;       // redibuja la casilla con su atributo real	
 								}
 
 								#ifdef MODE_128K

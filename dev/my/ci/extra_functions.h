@@ -245,24 +245,29 @@ unsigned char min_step (unsigned char d) {
 	return 1;
 }
 
-// persecucion: en el centro de cada casilla elige la salida libre
-// que mas acerca al jugador (no da la vuelta salvo en callejon sin salida)
+// persecucion (min_chase = 1): en el centro de cada casilla elige la salida libre
+// que mas acerca al jugador. Patrulla (0): la primera salida libre a partir de un
+// punto que cambia con el contador. Ninguna da la vuelta salvo en un callejon.
 void min_move (void) {
-	for (min_i = 0; min_i < MIN_SPEED; min_i ++) {
+	for (min_i = 0; min_i < min_spd [min_cur]; min_i ++) {
 		if (((_en_x | _en_y) & 15) == 0) {
 			min_px = (gpx + 8) >> 4; min_py = (gpy + 8) >> 4;
 			min_best = 255; min_nd = min_dir ^ 1;
 			for (min_d = 0; min_d < 4; min_d ++) {
-				if (min_d == (min_dir ^ 1)) continue;
+				if (min_chase [min_cur]) min_c = min_d;
+				else min_c = (min_d + maincounter) & 3;
+				if (min_c == (min_dir ^ 1)) continue;
 				min_tx = _en_x >> 4; min_ty = _en_y >> 4;
-				if (min_d == 0) min_ty ++;
-				else if (min_d == 1) min_ty --;
-				else if (min_d == 2) min_tx --;
+				if (min_c == 0) min_ty ++;
+				else if (min_c == 1) min_ty --;
+				else if (min_c == 2) min_tx --;
 				else min_tx ++;
 				if (min_blocked (min_tx, min_ty)) continue;
-				if (min_tx > min_px) min_dist = min_tx - min_px; else min_dist = min_px - min_tx;
-				if (min_ty > min_py) min_dist += min_ty - min_py; else min_dist += min_py - min_ty;
-				if (min_dist < min_best) { min_best = min_dist; min_nd = min_d; }
+				if (min_chase [min_cur]) {
+					if (min_tx > min_px) min_dist = min_tx - min_px; else min_dist = min_px - min_tx;
+					if (min_ty > min_py) min_dist += min_ty - min_py; else min_dist += min_py - min_ty;
+					if (min_dist < min_best) { min_best = min_dist; min_nd = min_c; }
+				} else { min_nd = min_c; break; }
 			}
 			min_dir = min_nd;
 		}
@@ -321,7 +326,7 @@ void ded_update(void) {
                 object_index = rdn;
                 print_object();                 // pinta el icono en el marcador
                 if (rdn == 4) maze_set (1);     // llave amarilla: se abre el laberinto
-                if (rdn == 1) { min_state = 1; beep_fx (3); }   // escudo: se arma el minotauro y suena el aviso
+                if (rdn == 1) { min_state = 1; min_cur = 0; beep_fx (3); }
                 // punto seguro
                 safe_point.pant = n_pant;
                 safe_point.x = ded_a;

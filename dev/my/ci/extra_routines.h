@@ -23,6 +23,7 @@ for (rdn = 0; rdn < 6; rdn++) {
         _x = objects[rdn].x;
         _y = objects[rdn].y;
         _t = objects[rdn].old_tile;
+        _n = behs [_t];
         update_tile();
         if (objects[rdn].action == 3) {
             p_ammo = 1;

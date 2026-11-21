@@ -18,9 +18,21 @@
 #define MIN_Y			1
 #define MIN_SPEED		4		// px por frame (el jugador va a 3)
 #define MIN_STUN_SECS	10
-unsigned char min_state = 0;	// 0 no activo, 1 armado, 2 persigue, 3 aturdido, 4 terminado
+// --- Minotauro: tabla de apariciones ---
+#define MIN_NUM			3
+#define MIN_SLOT		2		// hueco de enemigo (0-2) que usa; dejalo vacio en esas pantallas
+#define MIN_M			malotes [min_pant [min_cur] * MAX_ENEMS + MIN_SLOT]
+unsigned char min_pant[3]  = { 15, 4, 23 };
+unsigned char min_x[3]     = { 14, 14, 13 };
+unsigned char min_y[3]     = { 1, 1, 5 };
+unsigned char min_spd[3]   = { 4, 2, 2 };		// px por frame (el jugador va a 3)
+unsigned char min_stun[3]  = { 10, 5, 5 };		// segundos aturdido
+unsigned char min_chase[3] = { 1, 0, 0 };		// 1 persigue, 0 patrulla
+unsigned char min_retry[3] = { 0, 1, 1 };		// 1: si sales sin pararlo, vuelve a salir
+unsigned char min_state = 0;	// 0 no activo, 1 armado, 2 activo, 3 aturdido, 4 terminadas
+unsigned char min_cur = 0, min_hit = 0;
 unsigned char min_dir = 2, min_t = 0, min_say = 0;	// 0 abajo, 1 arriba, 2 izq, 3 der
-unsigned char min_i, min_d, min_nd, min_tx, min_ty, min_px, min_py, min_dist, min_best;
+unsigned char min_i, min_d, min_c, min_nd, min_tx, min_ty, min_px, min_py, min_dist, min_best;
 unsigned char hunger_sec = 0;
 unsigned char hud_ch[2] = {0, 0};
 unsigned char hud_k;

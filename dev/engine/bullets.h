@@ -253,6 +253,7 @@ void bullets_move (void) {
 				objects[2].in_floor = 1;
 				objects[2].old_tile = qtile(_x, _y);
 				update_tile();
+				_n = 0;
 				update_vision = 1;
 				player_direction = previous_direction;
 				

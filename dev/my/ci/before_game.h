@@ -7,6 +7,9 @@ objects[2].used = 1;   // hacha
 objects[3].used = 1;   // llave azul
 objects[4].used = 1;   // llave amarilla
 
+min_state = 0; min_cur = 0; min_hit = 0;
+for (rda = 0; rda < MIN_NUM; rda++) malotes [min_pant [rda] * MAX_ENEMS + MIN_SLOT].t = 0;
+
 
 // restart bread tiles
 for (rda = 0; rda < 100; rda++) {
