@@ -21,6 +21,7 @@ if [%1]==[justscripts] goto :compile
 
 echo Convirtiendo mapa
 ..\utils\mapcnv.exe ..\map\mapa.map assets\mapa.h 6 5 15 10 99  > nul
+python ..\utils\packmap.py assets\mapa.h
 rem ..\utils\rle62map_sp.exe in=..\map\mapa.map mk1h=assets\mapa.h out=mapa size=2,2 tlock=99 mk1locks > nul
 
 echo Convirtiendo enemigos/hotspots
@@ -47,7 +48,7 @@ if [%1]==[justassets] goto :end
 rem echo Running The Librarian
 rem ..\utils\librarian2.exe list=..\bin\list.txt index=assets\librarian.h bins_prefix=..\bin\ rams_prefix=..\bin\ > nul
 
-rem *** Música AY: Descomenta el player que vayas a usar (Wyz o Arkos) ***
+rem *** M sica AY: Descomenta el player que vayas a usar (Wyz o Arkos) ***
 
 rem echo Compilando musica 128k - Wyz Player
 rem cd ..\mus
