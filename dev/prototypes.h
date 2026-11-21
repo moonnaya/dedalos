@@ -142,6 +142,7 @@ void fill_screen_axis_y();
 void fill_screen_axis_x();
 void hud_tile (unsigned char x, unsigned char y, unsigned char t);
 void print_number_wan (void);
+void maze_set (unsigned char open);
 
 int i, j, index = 0;
 unsigned char p_txp = 1;
