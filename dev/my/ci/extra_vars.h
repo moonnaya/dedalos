@@ -22,7 +22,7 @@
 #define MIN_NUM			3
 #define MIN_SLOT		2		// hueco de enemigo (0-2) que usa; dejalo vacio en esas pantallas
 #define MIN_M			malotes [min_pant [min_cur] * MAX_ENEMS + MIN_SLOT]
-#define SOULS_NEEDED	14		// almas que hay que liberar
+#define SOULS_NEEDED	1		// almas que hay que liberar
 unsigned char souls_say = 0;
 unsigned char min_pant[3]  = { 15, 4, 23 };
 unsigned char min_x[3]     = { 14, 14, 13 };

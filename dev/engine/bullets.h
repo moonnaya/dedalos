@@ -235,15 +235,18 @@ void bullets_move (void) {
 
 			bullets_update ();
 			if (_b_estado == 0) {
-				//pintar hacha
-				if (_b_mx > 0) {
-					_x--;
-				} else if (_b_mx < 0) {
-					_x++;
-				} else if (_b_my > 0) {
-					_y--;
-				} else {
-					_y++;
+				// pintar hacha. Si salio por un borde, _x/_y no son validos (15 o 10)
+				if (_b_mx > 0) { if (_x > 14) _x = 14; else _x--; }
+				else if (_b_mx < 0) { if (_x > 14) _x = 0; else _x++; }
+				else if (_b_my > 0) { if (_y > 9) _y = 9; else _y--; }
+				else { if (_y > 9) _y = 0; else _y++; }
+				// nunca sobre una pared: retrocede hasta encontrar suelo
+				for (rdb = 0; rdb < 3; rdb ++) {
+					if (attr (_x, _y) < 8) break;
+					if (_b_mx > 0) _x --;
+					else if (_b_mx < 0) _x ++;
+					else if (_b_my > 0) _y --;
+					else _y ++;
 				}
 			
 				_t = o_axe.tile;
