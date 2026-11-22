@@ -290,6 +290,16 @@ void ded_update(void) {
         ded_print_page();
         return;
     }
+    if (souls_say) {                     // almas liberadas: fuera los esbirros y avisa Dedalo
+        souls_say = 0;
+        for (rda = 0; rda < 90; rda++)   // 30 pantallas x 3 huecos
+            if ((malotes[rda].t & 15) != 8) malotes[rda].t |= 16;   // marcados como muertos
+        enems_load ();                   // quita los de la pantalla actual
+        update_vision = 1;               // por si aparece Dedalo en esta pantalla
+        ded_cur = 5; ded_page = 0; ded_t = DED_PAGE_FRAMES;
+        ded_print_page();
+        return;
+    }
     if (ded_t) {                         // mensaje en curso
         ded_t--;
         if (ded_t == 0) {

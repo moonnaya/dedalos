@@ -22,6 +22,8 @@
 #define MIN_NUM			3
 #define MIN_SLOT		2		// hueco de enemigo (0-2) que usa; dejalo vacio en esas pantallas
 #define MIN_M			malotes [min_pant [min_cur] * MAX_ENEMS + MIN_SLOT]
+#define SOULS_NEEDED	14		// almas que hay que liberar
+unsigned char souls_say = 0;
 unsigned char min_pant[3]  = { 15, 4, 23 };
 unsigned char min_x[3]     = { 14, 14, 13 };
 unsigned char min_y[3]     = { 1, 1, 5 };
@@ -93,7 +95,7 @@ typedef struct {
     unsigned char almas;	// almas que hay que liberar antes de que aparezca
 } DEDALO;
 
-DEDALO ded[5];
+DEDALO ded[6];
 unsigned char ded_cur = 0, ded_t = 0, ded_page = 0;
 unsigned char ded_a, ded_b, ded_i;
 

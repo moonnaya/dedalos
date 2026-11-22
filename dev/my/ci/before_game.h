@@ -84,5 +84,8 @@ ded[3].pant = 5;
 ded[3].pos = 54;           // y*15 + x = 3*15 + 9
 ded[3].obj = 4;            // llave amarilla (acción 5)
 ded[3].msg = "LA LLAVE DE LA    LIBERTAD Y MUERTE ";
+ded[2].almas = SOULS_NEEDED;     // el escudo: hacen falta SOULS_NEEDED almas liberadas
+ded[5].msg = "ALMAS    LIBERADAS";
+souls_say = 0;
 ded_t = 0;
 maze_set (0);                                    // laberinto cerrado
