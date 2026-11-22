@@ -66,6 +66,8 @@ unsigned char door_pant[2] = { 20, 29 };
 unsigned char door_pos[2]  = { 73, 58 };   // y*15 + x: (13,4) y (13,3)
 unsigned int  door_i;                      // indice en mapa[]
 
+unsigned char min_face = 0;		// 0 = mira a la izquierda, 1 = a la derecha (ultimo lado horizontal)
+
 typedef struct {
     unsigned char action;
     unsigned char used,in_floor;
