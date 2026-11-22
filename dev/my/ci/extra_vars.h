@@ -12,7 +12,7 @@
 #define HUD_MSG_X		20		// columna (en caracteres) del texto
 #define HUD_MSG_Y		22		// fila de la primera linea (la segunda es 23)
 #define HUD_MSG_ATTR	66		// atributo de las letras
-#define HUNGER_SECONDS	5		// segundos por cada punto de hambre
+#define HUNGER_SECONDS	10		// segundos por cada punto de hambre
 #define MIN_PANT		15
 #define MIN_X			14
 #define MIN_Y			1

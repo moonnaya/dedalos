@@ -61,8 +61,11 @@ if (action == 1 && bread > 0) {
         print_hungry();
         print_bread();
     }
-    if (bread <= 0) {
+    if (bread == 0) {
         objects[0].used = 1;
+        action = 0;                  // nada equipado...
+        hud_tile (7, 11, 0);         // ...icono vacio...
+        next_object ();              // ...y pasa al siguiente objeto, si hay alguno
     }
 }
 
