@@ -28,6 +28,9 @@ for (rdn = 0; rdn < 6; rdn++) {
         if (objects[rdn].action == 3) {
             p_ammo = 1;
         }
+        action = objects[rdn].action;     // equiparlo al recogerlo
+        object_index = rdn;
+        print_object();                   // pinta su icono en el marcador
         update_vision = 1;
     }
 }

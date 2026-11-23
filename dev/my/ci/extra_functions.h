@@ -158,12 +158,14 @@ void print_bread() {
   hud_tile (7, 11, _t);
 }
 
-// 1 si hay algun esbirro vivo dentro del radio de aviso
+unsigned char esb_ret;
+
 unsigned char esb_near (void) {
 	esb_px = (gpx + 8) >> 4;
 	esb_py = (gpy + 8) >> 4;
 	// con el aviso puesto se exige un tile mas para quitarlo: evita parpadeo
-	esb_r = ESB_WARN_RADIUS + esb_warn;
+	esb_r = ESB_WARN_RADIUS + (esb_warn != 0);
+	esb_ret = 0;
 
 	for (esb_i = 0; esb_i < MAX_ENEMS; esb_i ++) {
 		esb_t = malotes [enoffs + esb_i].t;
@@ -175,9 +177,12 @@ unsigned char esb_near (void) {
 		esb_dy = (malotes [enoffs + esb_i].y + 8) >> 4;
 		if (esb_dy >= esb_py) esb_dy -= esb_py; else esb_dy = esb_py - esb_dy;
 
-		if (esb_dx <= esb_r && esb_dy <= esb_r) return 1;
+		if (esb_dx <= esb_r && esb_dy <= esb_r) {
+			if ((esb_t & 0x0f) == 8) return 2;     // minotauro: tiene prioridad
+			esb_ret = 1;
+		}
 	}
-	return 0;
+	return esb_ret;
 }
 
 // Dibuja un tile en el marcador (filas 10-11 de tiles, fuera del mapa).
@@ -209,7 +214,8 @@ void esb_update_warning (void) {
 	esb_now = esb_near ();
 	if (esb_now != esb_warn) {          // solo se pinta al cambiar de estado
 		esb_warn = esb_now;
-		if (esb_warn) hud_msg ("         AAAAHRG!", ESB_WARN_TILE);  // 2a linea
+		if (esb_warn == 2) hud_msg ("         MOOOOOH  ", 39);
+		else if (esb_warn) hud_msg ("         AAAAHRG!", ESB_WARN_TILE);
 		else hud_msg (0, 0);
 	}
 }

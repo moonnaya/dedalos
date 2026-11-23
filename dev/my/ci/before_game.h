@@ -89,3 +89,5 @@ ded[5].msg = "ALMAS    LIBERADAS";
 souls_say = 0;
 ded_t = 0;
 maze_set (0);                                    // laberinto cerrado
+ded[4].pant = 255;
+ded[4].msg = "HUYE              ";
