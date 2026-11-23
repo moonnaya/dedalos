@@ -43,23 +43,23 @@ for (rda = 0; rda < 4; rda++) {
 ded[0].pant = 12;
 ded[0].pos = 28;
 ded[0].obj = 2;
-ded[0].msg = "EL HACHA LIBERA   LAS ALMASDE LOS   POSEIDOS.LIBERA 14ALMAS";
 ded[1].pant = 14;
 ded[1].pos = 123;          
 ded[1].obj = 3;            // llave azul
-ded[1].msg = "LA LLAVE DE LA    BESTIA.  CUIDA TUSESPALDAS";
 ded[2].pant = 9;
 ded[2].pos = 118;          // y*15 + x = 7*15 + 13
 ded[2].obj = 1;            // escudo (acción 2)
-ded[2].msg = "EL ESCUDODETECTA  EL       CORAZON  DE LA    BESTIA Y LA       DETIENE  CUIDADO  VIENE PORTU       IZQUIERDA";
 ded[3].pant = 5;
 ded[3].pos = 54;           // y*15 + x = 3*15 + 9
 ded[3].obj = 4;            // llave amarilla (acción 5)
-ded[3].msg = "LA LLAVE DE LA    LIBERTAD Y MUERTE";
 ded[2].almas = SOULS_NEEDED;     // el escudo: hacen falta SOULS_NEEDED almas liberadas
 ded[5].msg = "ALMAS    LIBERADAS";
 souls_say = 0;
 ded_t = 0;
 maze_set (0);                                    // laberinto cerrado
 ded[4].pant = 255;
-ded[4].msg = "HUYE";
+
+ded[0].msg = "EL HACHA LIBERA   LAS ALMASDE LOS   POSEIDOS.LIBERA 14ALMAS             ";
+ded[1].msg = "LA LLAVE DE LA    BESTIA.  CUIDA TUSESPALDAS          ";
+ded[3].msg = "LA LLAVE DE LA    LIBERTAD Y MUERTE ";
+ded[4].msg = "HUYE              ";
