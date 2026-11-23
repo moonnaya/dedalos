@@ -562,7 +562,7 @@ void enems_move (void) {
 									enems_kill ();	
 									_x = _en_x >> 4;
 									_y = _en_y >> 4;	
-									_t = o_axe.tile;
+									_t = AXE_TILE;
 									objects[2].pant = n_pant;
 									objects[2].x = _x;
 									objects[2].y = _y;

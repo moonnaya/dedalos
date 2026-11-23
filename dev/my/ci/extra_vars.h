@@ -22,7 +22,7 @@
 #define MIN_NUM			3
 #define MIN_SLOT		2		// hueco de enemigo (0-2) que usa; dejalo vacio en esas pantallas
 #define MIN_M			malotes [min_pant [min_cur] * MAX_ENEMS + MIN_SLOT]
-#define SOULS_NEEDED	10		// almas que hay que liberar
+#define SOULS_NEEDED	14		// almas que hay que liberar
 unsigned char souls_say = 0;
 unsigned char min_pant[3]  = { 15, 4, 23 };
 unsigned char min_x[3]     = { 14, 14, 13 };
@@ -49,11 +49,9 @@ unsigned char action = 1;   //0 -> nada
 unsigned char bread = 99;
 unsigned char cuentafaps = 0;
 unsigned char segundos = 0;
-unsigned char prev_seg = 0;
 unsigned char sun_position = 0;
 unsigned char previous_night_mode = 0;
 unsigned char hungry = 99;
-unsigned char lifes = 3;
 unsigned char eat = 0;
 
 typedef struct {
@@ -77,12 +75,8 @@ typedef struct {
     unsigned char x,y;
 } OBJECT;
 
-OBJECT o_null;
-OBJECT o_bread;
-OBJECT o_shield;
-OBJECT o_axe;
-OBJECT o_key_blue;
-OBJECT o_key_yellow;
+#define AXE_TILE 33
+unsigned char obj_tile[6] = { 0, 32, 33, 36, 37, 0 };
 
 OBJECT objects[6];
 unsigned char total_objects = 0;

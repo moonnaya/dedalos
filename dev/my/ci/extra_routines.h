@@ -73,10 +73,3 @@ if (action == 1 && bread > 0) {
 }
 
 door_check ();
-
-/*
-if (lifes == 0) {
-    //game over
-    game_over();
-    playing = success = 0;
-}*/

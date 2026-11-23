@@ -126,12 +126,7 @@
 		if (update_vision == 1) {
 			update_vision = 0;
 			draw_scr_background();  // quizas se pueda mejorar esto, haciendo la operacion sin el calculo del mapa, solo cogiendo la pantalla ya cargada
-			update_vision_back();
 			invalidate_viewport ();
-		}
-
-		if (p_tx != p_txp || p_ty != p_typ) {
-			update_vision_back();
 		}
 
 		if (first_time == 1) {
@@ -162,8 +157,8 @@
 
 		p_tx = (gpx) >> 4;
 		p_ty = (gpy) >> 4;
-		p_txp = (p_x) >> 4;
-		p_typ = (p_y) >> 4;
+		//p_txp = (p_x) >> 4;
+		//p_typ = (p_y) >> 4;
 		
 		// Move player
 		player_move ();

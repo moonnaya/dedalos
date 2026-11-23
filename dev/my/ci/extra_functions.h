@@ -74,7 +74,7 @@ void update_time(void) {
 		if (hunger_sec >= HUNGER_SECONDS) {
 			hunger_sec = 0;
 			hungry --;
-			if (lifes > 0) print_hungry();
+			print_hungry();
 		}
 	}
 	if (hungry == 0) {

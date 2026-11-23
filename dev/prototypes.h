@@ -127,7 +127,6 @@ void STOP_SOUND (void);
 #endif
 
 void vision();
-void update_vision_back();
 void draw_screen();
 unsigned char isWall(unsigned char tile);
 void update_time(void);
