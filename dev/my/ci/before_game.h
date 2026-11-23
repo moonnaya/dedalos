@@ -61,5 +61,6 @@ ded[4].pant = 255;
 
 ded[0].msg = "EL HACHA LIBERA   LAS ALMASDE LOS   POSEIDOS.LIBERA 14ALMAS             ";
 ded[1].msg = "LA LLAVE DE LA    BESTIA.  CUIDA TUSESPALDAS          ";
+ded[2].msg = "EL ESCUDODETECTA  EL       CORAZON  DE LA    BESTIA Y LA       DETIENE  CUIDADO  VIENE PORTU       IZQUIERDA";
 ded[3].msg = "LA LLAVE DE LA    LIBERTAD Y MUERTE ";
 ded[4].msg = "HUYE              ";
