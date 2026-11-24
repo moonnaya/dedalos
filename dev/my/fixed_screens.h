@@ -35,9 +35,48 @@ void game_ending (void) {
 }
 
 void game_over (void) {
-	_x = 10; _y = 11; _t = 79; _gp_gen = spacer; print_str ();
-	_x = 10; _y = 12; _t = 79; _gp_gen = (unsigned char *)(" GAME OVER! "); print_str ();
-	_x = 10; _y = 13; _t = 79; _gp_gen = spacer; print_str ();
+	sp_UpdateNow ();                 // vuelca lo pendiente antes de tocar la pantalla
+
+	#asm
+		ld  e, 7                     ; 7 pasos: el color mas alto (7) llega a 0
+	.go_step
+		ld  hl, 22528                ; area de atributos
+		ld  bc, 768
+	.go_cell
+		ld  a, (hl)
+		and 63                       ; quita FLASH y BRIGHT
+		ld  d, a
+		and 7                        ; tinta
+		jr  z, go_ink
+		dec d                        ; tinta - 1
+	.go_ink
+		ld  a, d
+		and 56                       ; papel
+		jr  z, go_paper
+		ld  a, d
+		sub 8
+		ld  d, a                     ; papel - 1
+	.go_paper
+		ld  (hl), d
+		inc hl
+		dec bc
+		ld  a, b
+		or  c
+		jr  nz, go_cell
+
+		ld  bc, 8000                 ; pausa entre pasos (~60 ms)
+	.go_wait
+		dec bc
+		ld  a, b
+		or  c
+		jr  nz, go_wait
+
+		dec e
+		jr  nz, go_step
+	#endasm
+
+	_x = 11; _y = 11; _t = 66; _gp_gen = (unsigned char *)("GAME"); print_str ();
+	_x = 16; _y = 11; _t = 66; _gp_gen = (unsigned char *)("OVER"); print_str ();
 	sp_UpdateNow ();
 
 	#ifdef MODE_128K
