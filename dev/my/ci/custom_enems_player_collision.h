@@ -17,4 +17,6 @@ if (_en_t == 8) {
 			if (!min_step (min_dir ^ 1)) break;
 		goto player_enem_collision_done;
 	}
+	if (p_estado == EST_NORMAL && collide ()) playing = 0;   // el minotauro mata: game over directo
+	goto player_enem_collision_done;                         // sin quitar vida ni respawn
 }

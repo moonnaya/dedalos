@@ -77,11 +77,7 @@ void update_time(void) {
 			print_hungry();
 		}
 	}
-	if (hungry == 0) {
-		hungry = 50;
-		print_hungry();
-		p_killme = 4;                     // pasa por la misma muerte: baja p_life y vuelve al safe point
-	}
+	if (hungry == 0) playing = 0;
 }
 
 void print_lifes() {
@@ -163,14 +159,15 @@ unsigned char esb_ret;
 unsigned char esb_near (void) {
 	esb_px = (gpx + 8) >> 4;
 	esb_py = (gpy + 8) >> 4;
-	// con el aviso puesto se exige un tile mas para quitarlo: evita parpadeo
-	esb_r = ESB_WARN_RADIUS + (esb_warn != 0);
 	esb_ret = 0;
 
 	for (esb_i = 0; esb_i < MAX_ENEMS; esb_i ++) {
 		esb_t = malotes [enoffs + esb_i].t;
 		// tipo 0 = hueco vacio; bit 4 = enemigo muerto
 		if ((esb_t & 0x0f) == 0 || (esb_t & 0x10)) continue;
+
+		// radio segun el tipo; con el aviso puesto se exige un tile mas para quitarlo
+		esb_r = (((esb_t & 0x0f) == 8) ? MIN_WARN_RADIUS : ESB_WARN_RADIUS) + (esb_warn != 0);
 
 		esb_dx = (malotes [enoffs + esb_i].x + 8) >> 4;
 		if (esb_dx >= esb_px) esb_dx -= esb_px; else esb_dx = esb_px - esb_dx;

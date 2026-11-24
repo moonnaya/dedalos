@@ -2,7 +2,7 @@
 
 if [%1]==[help] goto :help
 
-set game=lala_beta
+set game=dedalo
 
 if [%1]==[justcompile] goto :compile
 if [%1]==[clean] goto :clean
@@ -77,7 +77,7 @@ rem *** Tipo de cargador ***
 
 echo Construyendo cinta
 rem cambia LOADER por el nombre que quieres que salga en Program:
-..\utils\bas2tap -a10 -sLOADER loader\loader.bas loader.tap > nul
+..\utils\bas2tap -a10 -sDEDALO loader\loader.bas loader.tap > nul
 ..\utils\bin2tap -o screen.tap -a 16384 loading.bin > nul
 ..\utils\bin2tap -o main.tap -a 24000 %game%.bin > nul
 copy /b loader.tap + screen.tap + main.tap %game%.tap > nul
