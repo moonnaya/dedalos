@@ -29,9 +29,10 @@ unsigned char min_pant[5]  = { 15, 4, 23, 17, 29 };
 unsigned char min_x[5]     = { 14, 14, 13, 12, 9 };
 unsigned char min_y[5]     = { 1, 1, 6, 9, 4 };
 unsigned char min_spd[5]   = { 2, 3, 3, 4, 4 };		// px por frame (el jugador va a 3)
-unsigned char min_stun[5]  = { 4, 4, 3, 2, 1 };		// segundos aturdido
+unsigned char min_stun[5]  = { 4, 4, 3, 3, 2 };		// segundos aturdido
 unsigned char min_chase[5] = { 1, 0, 0, 1, 1 };		// 1 persigue, 0 patrulla
 unsigned char min_retry[5] = { 0, 1, 1, 1, 1 };		// 1: si sales sin pararlo, vuelve a salir
+unsigned char min_done = 0;		// bit i = aparicion i completada
 unsigned char min_state = 0;	// 0 no activo, 1 armado, 2 activo, 3 aturdido, 4 terminadas
 unsigned char min_cur = 0, min_hit = 0;
 unsigned char min_dir = 2, min_t = 0, min_say = 0;	// 0 abajo, 1 arriba, 2 izq, 3 der

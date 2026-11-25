@@ -3,7 +3,7 @@
 // Solo el pan empieza en el inventario. used = 1 significa "no lo tiene";
 // pasa a 0 al recogerlo (ver extra_routines.h)
 
-min_state = 0; min_cur = 0; min_hit = 0;
+min_state = 0; min_cur = 0; min_hit = 0; min_done = 0;
 for (rda = 0; rda < MIN_NUM; rda++) malotes [min_pant [rda] * MAX_ENEMS + MIN_SLOT].t = 0;
 
 
