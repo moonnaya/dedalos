@@ -7,7 +7,7 @@
 			beep_fx (rda);
 			beep_fx (rdb);
 		} while (-- gpit);
-		beep_fx (9);
+		beep_fx (3);
 	}
 #endif
 
@@ -81,7 +81,7 @@ void game_over (void) {
 
 	#ifdef MODE_128K
 	#else
-		rda = 7; rdb = 2;
+		rda = 4; rdb = 0;
 		lame_sound ();
 	#endif
 
